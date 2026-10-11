@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CreditFair | AI Loan Risk & Fairness</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <div class="brand">
+
+        <div class="brand-logo">
+            CF
+        </div>
+
+        <div>
+            <h2>CreditFair</h2>
+            <span>AI Loan Risk & Fairness</span>
+        </div>
+
+    </div>
+
+    <nav>
+
+        <a href="#home">Home</a>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#analysis">Analysis</a>
+        <a href="#fairness">Fairness</a>
+        <a href="#prediction">Prediction</a>
+
+    </nav>
+
+</header>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero" id="home">
+
+    <div class="hero-content">
+
+        <div class="hero-tag">
+            AI • MACHINE LEARNING • RESPONSIBLE AI
+        </div>
+
+        <h1>
+            Smarter Loan Decisions.
+            <span>Fairer Outcomes.</span>
+        </h1>
+
+        <p>
+            CreditFair is an AI-based loan default prediction
+            and fairness assessment system designed to analyze
+            borrower risk and examine differences in model
+            behavior across groups.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="#dashboard" class="btn primary">
+                Explore Dashboard
+            </a>
+
+            <a href="#prediction" class="btn secondary">
+                Try Prediction
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="hero-panel">
+
+        <div class="panel-header">
+
+            <span>MODEL PERFORMANCE</span>
+
+            <span class="live-dot">
+                ● ANALYZED
+            </span>
+
+        </div>
+
+
+        <div class="hero-score">
+
+            <strong>71.25%</strong>
+
+            <span>ROC-AUC</span>
+
+        </div>
+
+
+        <div class="hero-mini-stats">
+
+            <div>
+                <strong>65.97%</strong>
+                <span>Accuracy</span>
+            </div>
+
+            <div>
+                <strong>64.15%</strong>
+                <span>Recall</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= DASHBOARD ================= -->
+
+<section class="section" id="dashboard">
+
+    <div class="section-heading">
+
+        <span class="section-tag">
+            PROJECT OVERVIEW
+        </span>
+
+        <h2>
+            CreditFair Dashboard
+        </h2>
+
+        <p>
+            Key statistics from the CreditFair dataset,
+            machine learning model and evaluation.
+        </p>
+
+    </div>
+
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                ◈
+            </div>
+
+            <span>DATASET</span>
+
+            <h3>27,003</h3>
+
+            <p>Loan Records</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                ◇
+            </div>
+
+            <span>FEATURES</span>
+
+            <h3>47</h3>
+
+            <p>Dataset Features</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                %
+            </div>
+
+            <span>ACCURACY</span>
+
+            <h3>65.97%</h3>
+
+            <p>Classification Accuracy</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                ↗
+            </div>
+
+            <span>ROC-AUC</span>
+
+            <h3>71.25%</h3>
+
+            <p>Model Discrimination</p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= DATA ANALYSIS ================= -->
+
+<section class="section dark-section" id="analysis">
+
+    <div class="section-heading">
+
+        <span class="section-tag">
+            DATA & MODEL ANALYSIS
+        </span>
+
+        <h2>
+            Visualizing CreditFair
+        </h2>
+
+        <p>
+            Interactive charts based on the actual evaluation
+            results of the CreditFair project.
+        </p>
+
+    </div>
+
+
+    <div class="chart-grid">
+
+        <!-- Loan Status -->
+
+        <div class="chart-card">
+
+            <div class="chart-title">
+
+                <div>
+                    <h3>Loan Status Distribution</h3>
+
+                    <p>
+                        Distribution of fully paid and charged-off loans
+                    </p>
+                </div>
+
+                <span class="chart-number">
+                    27K
+                </span>
+
+            </div>
+
+            <div class="chart-box">
+                <canvas id="loanStatusChart"></canvas>
+            </div>
+
+        </div>
+
+
+        <!-- Model Performance -->
+
+        <div class="chart-card">
+
+            <div class="chart-title">
+
+                <div>
+                    <h3>Model Performance</h3>
+
+                    <p>
+                        Classification evaluation metrics
+                    </p>
+                </div>
+
+                <span class="chart-number">
+                    ML
+                </span>
+
+            </div>
+
+            <div class="chart-box">
+                <canvas id="performanceChart"></canvas>
+            </div>
+
+        </div>
+
+
+        <!-- Fairness -->
+
+        <div class="chart-card large-chart">
+
+            <div class="chart-title">
+
+                <div>
+
+                    <h3>
+                        Fairness — Recall by Group
+                    </h3>
+
+                    <p>
+                        Comparison across home ownership groups
+                    </p>
+
+                </div>
+
+                <span class="chart-number">
+                    FAIR
+                </span>
+
+            </div>
+
+            <div class="chart-box">
+                <canvas id="fairnessChart"></canvas>
+            </div>
+
+        </div>
+
+
+        <!-- Dataset information -->
+
+        <div class="dataset-card">
+
+            <span class="section-tag">
+                DATASET
+            </span>
+
+            <h3>
+                Kaggle Loan Default Dataset
+            </h3>
+
+            <p>
+                CreditFair uses a Kaggle loan dataset containing
+                borrower information, loan characteristics and
+                repayment outcomes.
+            </p>
+
+
+            <div class="dataset-row">
+                <span>Records</span>
+                <strong>27,003</strong>
+            </div>
+
+            <div class="dataset-row">
+                <span>Columns</span>
+                <strong>47</strong>
+            </div>
+
+            <div class="dataset-row">
+                <span>Duplicates</span>
+                <strong>0</strong>
+            </div>
+
+            <div class="dataset-row">
+                <span>Target</span>
+                <strong>loan_status</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= MODEL ================= -->
+
+<section class="section">
+
+    <div class="section-heading">
+
+        <span class="section-tag">
+            MACHINE LEARNING
+        </span>
+
+        <h2>
+            Classification Model
+        </h2>
+
+        <p>
+            Logistic Regression was used for binary loan
+            default classification.
+        </p>
+
+    </div>
+
+
+    <div class="metrics-grid">
+
+        <div class="metric-card">
+
+            <span>ACCURACY</span>
+
+            <strong>65.97%</strong>
+
+            <p>
+                Overall classification accuracy
+            </p>
+
+        </div>
+
+
+        <div class="metric-card">
+
+            <span>PRECISION</span>
+
+            <strong>24.72%</strong>
+
+            <p>
+                Precision for default prediction
+            </p>
+
+        </div>
+
+
+        <div class="metric-card">
+
+            <span>RECALL</span>
+
+            <strong>64.15%</strong>
+
+            <p>
+                Default cases detected
+            </p>
+
+        </div>
+
+
+        <div class="metric-card">
+
+            <span>F1 SCORE</span>
+
+            <strong>35.69%</strong>
+
+            <p>
+                Balance between precision and recall
+            </p>
+
+        </div>
+
+
+        <div class="metric-card">
+
+            <span>ROC-AUC</span>
+
+            <strong>71.25%</strong>
+
+            <p>
+                Ranking performance of the classifier
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="model-explanation">
+
+        <div>
+
+            <span class="section-tag">
+                MODEL DESIGN
+            </span>
+
+            <h3>
+                Why Logistic Regression?
+            </h3>
+
+            <p>
+                The target variable <strong>loan_status</strong>
+                contains two classes:
+            </p>
+
+            <div class="class-boxes">
+
+                <div class="class-box paid">
+                    <strong>0</strong>
+                    <span>Fully Paid</span>
+                </div>
+
+                <div class="class-box charged">
+                    <strong>1</strong>
+                    <span>Charged Off</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="model-note">
+
+            <h3>
+                Class Imbalance Handling
+            </h3>
+
+            <p>
+                The dataset contains significantly more fully
+                paid loans than charged-off loans.
+            </p>
+
+            <p>
+                CreditFair uses
+                <strong>class_weight="balanced"</strong>
+                to give additional importance to the minority class.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FAIRNESS ================= -->
+
+<section class="section fairness-section" id="fairness">
+
+    <div class="section-heading">
+
+        <span class="section-tag">
+            RESPONSIBLE AI
+        </span>
+
+        <h2>
+            Fairness Assessment
+        </h2>
+
+        <p>
+            CreditFair examines model behavior across
+            home ownership groups.
+        </p>
+
+    </div>
+
+
+    <div class="fairness-layout">
+
+
+        <div class="fairness-content">
+
+            <h3>
+                Why Measure Fairness?
+            </h3>
+
+            <p>
+                A machine learning model should not only produce
+                predictions. Its behavior should also be examined
+                across different groups.
+            </p>
+
+            <p>
+                CreditFair compares accuracy, precision, recall
+                and positive prediction rate across home
+                ownership categories.
+            </p>
+
+
+            <div class="fairness-warning">
+
+                <strong>
+                    ⚠ Interpretation Notice
+                </strong>
+
+                <p>
+                    The OTHER group contains only 13 evaluation
+                    samples. Its metrics should therefore be
+                    interpreted cautiously.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-card">
+
+            <h3>
+                Group Evaluation Results
+            </h3>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                    <tr>
+                        <th>Group</th>
+                        <th>Samples</th>
+                        <th>Accuracy</th>
+                        <th>Precision</th>
+                        <th>Recall</th>
+                        <th>Prediction Rate</th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    <tr>
+                        <td>MORTGAGE</td>
+                        <td>2,385</td>
+                        <td>66.88%</td>
+                        <td>23.84%</td>
+                        <td>60.95%</td>
+                        <td>36.23%</td>
+                    </tr>
+
+                    <tr>
+                        <td>OWN</td>
+                        <td>446</td>
+                        <td>66.82%</td>
+                        <td>25.90%</td>
+                        <td>63.24%</td>
+                        <td>37.22%</td>
+                    </tr>
+
+                    <tr>
+                        <td>RENT</td>
+                        <td>2,557</td>
+                        <td>65.04%</td>
+                        <td>25.34%</td>
+                        <td>67.01%</td>
+                        <td>40.13%</td>
+                    </tr>
+
+                    <tr>
+                        <td>OTHER</td>
+                        <td>13</td>
+                        <td>53.85%</td>
+                        <td>14.29%</td>
+                        <td>100%</td>
+                        <td>53.85%</td>
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= PREDICTION ================= -->
+
+<section class="section dark-section" id="prediction">
+
+    <div class="section-heading">
+
+        <span class="section-tag">
+            LOAN RISK ANALYSIS
+        </span>
+
+        <h2>
+            Loan Default Prediction
+        </h2>
+
+        <p>
+            Enter applicant information to demonstrate the
+            CreditFair prediction interface.
+        </p>
+
+    </div>
+
+
+    <div class="prediction-container">
+
+
+        <!-- FORM -->
+
+        <div class="prediction-form">
+
+            <div class="form-group">
+
+                <label>
+                    Loan Amount
+                </label>
+
+                <input
+                        type="number"
+                        id="loanAmount"
+                        value="15000"
+                        min="0">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Interest Rate (%)
+                </label>
+
+                <input
+                        type="number"
+                        id="interestRate"
+                        value="10"
+                        min="0"
+                        step="0.1">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Annual Income
+                </label>
+
+                <input
+                        type="number"
+                        id="annualIncome"
+                        value="60000"
+                        min="0">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Home Ownership
+                </label>
+
+                <select id="homeOwnership">
+
+                    <option value="RENT">
+                        RENT
+                    </option>
+
+                    <option value="OWN">
+                        OWN
+                    </option>
+
+                    <option value="MORTGAGE">
+                        MORTGAGE
+                    </option>
+
+                    <option value="OTHER">
+                        OTHER
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Loan Purpose
+                </label>
+
+                <select id="purpose">
+
+                    <option value="credit_card">
+                        Credit Card
+                    </option>
+
+                    <option value="debt_consolidation">
+                        Debt Consolidation
+                    </option>
+
+                    <option value="home_improvement">
+                        Home Improvement
+                    </option>
+
+                    <option value="major_purchase">
+                        Major Purchase
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Debt-to-Income Ratio
+                </label>
+
+                <input
+                        type="number"
+                        id="dti"
+                        value="18"
+                        min="0"
+                        step="0.1">
+
+            </div>
+
+
+            <button
+                    class="btn primary predict-btn"
+                    onclick="predictLoan()">
+
+                Predict Loan Status
+
+            </button>
+
+        </div>
+
+
+        <!-- RESULT -->
+
+        <div class="prediction-result">
+
+            <span class="result-label">
+                MODEL DEMONSTRATION
+            </span>
+
+
+            <h2 id="predictionStatus">
+                FULLY PAID
+            </h2>
+
+
+            <div class="prediction-score">
+
+                <strong id="predictionProbability">
+                    66.41%
+                </strong>
+
+                <span>
+                    confidence
+                </span>
+
+            </div>
+
+
+            <p id="predictionMessage">
+                Demonstration based on the CreditFair
+                classification workflow.
+            </p>
+
+
+            <div class="prediction-chart">
+
+                <canvas id="predictionChart"></canvas>
+
+            </div>
+
+
+            <div class="prediction-legend">
+
+                <div>
+                    <span class="legend-dot paid-dot"></span>
+                    Fully Paid
+                </div>
+
+                <div>
+                    <span class="legend-dot charged-dot"></span>
+                    Charged Off
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="demo-notice">
+
+        <strong>
+            Presentation Mode:
+        </strong>
+
+        This frontend currently demonstrates the prediction
+        interface. It does not directly load the Python
+        scikit-learn model because no backend API is connected.
+
+    </div>
+
+</section>
+
+
+<!-- ================= WORKFLOW ================= -->
+
+<section class="section">
+
+    <div class="section-heading">
+
+        <span class="section-tag">
+            SYSTEM WORKFLOW
+        </span>
+
+        <h2>
+            How CreditFair Works
+        </h2>
+
+        <p>
+            From raw loan data to prediction and fairness analysis.
+        </p>
+
+    </div>
+
+
+    <div class="workflow">
+
+        <div class="workflow-item">
+
+            <div class="workflow-number">
+                01
+            </div>
+
+            <h3>
+                Data Collection
+            </h3>
+
+            <p>
+                Kaggle loan dataset is loaded and inspected.
+            </p>
+
+        </div>
+
+
+        <div class="workflow-arrow">
+            →
+        </div>
+
+
+        <div class="workflow-item">
+
+            <div class="workflow-number">
+                02
+            </div>
+
+            <h3>
+                Preprocessing
+            </h3>
+
+            <p>
+                Missing values, numerical and categorical
+                features are processed.
+            </p>
+
+        </div>
+
+
+        <div class="workflow-arrow">
+            →
+        </div>
+
+
+        <div class="workflow-item">
+
+            <div class="workflow-number">
+                03
+            </div>
+
+            <h3>
+                ML Prediction
+            </h3>
+
+            <p>
+                Logistic Regression predicts loan status.
+            </p>
+
+        </div>
+
+
+        <div class="workflow-arrow">
+            →
+        </div>
+
+
+        <div class="workflow-item">
+
+            <div class="workflow-number">
+                04
+            </div>
+
+            <h3>
+                Fairness Analysis
+            </h3>
+
+            <p>
+                Model behavior is compared across groups.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <div class="footer-brand">
+
+        <div class="brand-logo">
+            CF
+        </div>
+
+        <div>
+
+            <h3>
+                CreditFair
+            </h3>
+
+            <p>
+                AI-Based Loan Default Prediction
+                & Fair Lending Assessment
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-right">
+
+        <span>
+            Machine Learning Project
+        </span>
+
+        <span>
+            © 2026 CreditFair
+        </span>
+
+    </div>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+
+</html>

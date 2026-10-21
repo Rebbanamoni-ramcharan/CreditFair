@@ -445,220 +445,124 @@ createPredictionChart(
 
 
 /* =========================================================
-   PREDICTION FUNCTION
+   PREDICTION FUNCTION  (calls real FastAPI backend)
 ========================================================= */
 
-function predictLoan() {
+async function predictLoan() {
 
-    const loanAmount =
-        parseFloat(
-            document.getElementById(
-                "loanAmount"
-            ).value
-        ) || 0;
+    const loanAmount      = parseFloat(document.getElementById("loanAmount").value) || 0;
+    const interestRate    = parseFloat(document.getElementById("interestRate").value) || 0;
+    const annualIncome    = parseFloat(document.getElementById("annualIncome").value) || 0;
+    const homeOwnership   = document.getElementById("homeOwnership").value;
+    const purpose         = document.getElementById("purpose").value;
+    const dti             = parseFloat(document.getElementById("dti").value) || 0;
 
+    const statusEl      = document.getElementById("predictionStatus");
+    const probEl        = document.getElementById("predictionProbability");
+    const msgEl         = document.getElementById("predictionMessage");
+    const noticeEl      = document.querySelector(".demo-notice");
 
-    const interestRate =
-        parseFloat(
-            document.getElementById(
-                "interestRate"
-            ).value
-        ) || 0;
+    /* Show loading */
+    statusEl.textContent      = "ANALYZING...";
+    statusEl.style.color      = "#98a2b3";
+    probEl.textContent        = "—";
+    msgEl.textContent         = "Calling the CreditFair ML model...";
 
+    try {
 
-    const annualIncome =
-        parseFloat(
-            document.getElementById(
-                "annualIncome"
-            ).value
-        ) || 0;
+        const response = await fetch("/predict", {
+            method:  "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                loan_amnt:      loanAmount,
+                int_rate:       interestRate,
+                annual_inc:     annualIncome,
+                home_ownership: homeOwnership,
+                purpose:        purpose,
+                dti:            dti
+            })
+        });
 
+        if (!response.ok) throw new Error("API error " + response.status);
 
-    const homeOwnership =
-        document.getElementById(
-            "homeOwnership"
-        ).value;
+        const result = await response.json();
 
+        const fp = result.probability_fully_paid;
+        const co = result.probability_charged_off;
 
-    const purpose =
-        document.getElementById(
-            "purpose"
-        ).value;
-
-
-    const dti =
-        parseFloat(
-            document.getElementById(
-                "dti"
-            ).value
-        ) || 0;
-
-
-    /*
-       This frontend uses a DEMONSTRATION score.
-
-       It does NOT pretend to directly execute the
-       Python scikit-learn model.
-
-       The actual trained model remains in the
-       Python project.
-    */
-
-
-    let riskScore = 0;
-
-
-    /* Interest rate */
-
-    if (interestRate >= 15) {
-        riskScore += 18;
-    }
-    else if (interestRate >= 12) {
-        riskScore += 10;
-    }
-    else if (interestRate >= 8) {
-        riskScore += 4;
-    }
-
-
-    /* DTI */
-
-    if (dti >= 30) {
-        riskScore += 20;
-    }
-    else if (dti >= 20) {
-        riskScore += 10;
-    }
-    else {
-        riskScore += 2;
-    }
-
-
-    /* Loan / income ratio */
-
-    if (annualIncome > 0) {
-
-        const ratio =
-            loanAmount / annualIncome;
-
-        if (ratio > 0.5) {
-            riskScore += 18;
+        if (result.predicted_class === 1) {
+            statusEl.textContent = "CHARGED OFF";
+            statusEl.style.color = "#fb7185";
+            probEl.textContent   = co.toFixed(2) + "%";
+            msgEl.textContent    = "The CreditFair ML model predicts a higher default risk for these inputs.";
+        } else {
+            statusEl.textContent = "FULLY PAID";
+            statusEl.style.color = "#a5b4fc";
+            probEl.textContent   = fp.toFixed(2) + "%";
+            msgEl.textContent    = "The CreditFair ML model predicts this loan is likely to be fully repaid.";
         }
-        else if (ratio > 0.3) {
-            riskScore += 10;
+
+        if (noticeEl) {
+            noticeEl.innerHTML =
+                "<strong>Live ML Mode:</strong> Result produced by the deployed " +
+                "scikit-learn Logistic Regression model via the FastAPI backend.";
         }
-        else {
-            riskScore += 3;
+
+        createPredictionChart(fp, co);
+
+    } catch (err) {
+
+        /* Fallback demo scoring when API is unreachable */
+        console.warn("API unavailable – demo mode:", err);
+
+        if (noticeEl) {
+            noticeEl.innerHTML =
+                "<strong>Presentation Mode:</strong> Backend API not reachable. " +
+                "Showing demo score instead.";
         }
+
+        let riskScore = 0;
+
+        if (interestRate >= 15)       riskScore += 18;
+        else if (interestRate >= 12)  riskScore += 10;
+        else if (interestRate >= 8)   riskScore += 4;
+
+        if (dti >= 30)       riskScore += 20;
+        else if (dti >= 20)  riskScore += 10;
+        else                 riskScore += 2;
+
+        if (annualIncome > 0) {
+            const ratio = loanAmount / annualIncome;
+            if (ratio > 0.5)       riskScore += 18;
+            else if (ratio > 0.3)  riskScore += 10;
+            else                   riskScore += 3;
+        }
+
+        if (homeOwnership === "RENT")     riskScore += 5;
+        else if (homeOwnership === "OTHER")   riskScore += 8;
+        else if (homeOwnership === "OWN")     riskScore += 3;
+        else if (homeOwnership === "MORTGAGE") riskScore += 2;
+
+        if (purpose === "debt_consolidation") riskScore += 3;
+        if (purpose === "major_purchase")     riskScore += 2;
+
+        let co = Math.max(5, Math.min(95, 20 + riskScore * 0.65));
+        let fp = 100 - co;
+
+        if (co >= 50) {
+            statusEl.textContent = "CHARGED OFF";
+            statusEl.style.color = "#fb7185";
+            probEl.textContent   = co.toFixed(2) + "%";
+            msgEl.textContent    = "Demo: higher relative default risk for these inputs.";
+        } else {
+            statusEl.textContent = "FULLY PAID";
+            statusEl.style.color = "#a5b4fc";
+            probEl.textContent   = fp.toFixed(2) + "%";
+            msgEl.textContent    = "Demo: higher relative probability of full repayment.";
+        }
+
+        createPredictionChart(fp, co);
     }
-
-
-    /* Home ownership */
-
-    if (homeOwnership === "RENT") {
-        riskScore += 5;
-    }
-    else if (homeOwnership === "OTHER") {
-        riskScore += 8;
-    }
-    else if (homeOwnership === "OWN") {
-        riskScore += 3;
-    }
-    else if (homeOwnership === "MORTGAGE") {
-        riskScore += 2;
-    }
-
-
-    /* Purpose */
-
-    if (purpose === "debt_consolidation") {
-        riskScore += 3;
-    }
-
-    if (purpose === "major_purchase") {
-        riskScore += 2;
-    }
-
-
-    /*
-       Convert score into probability.
-       Keep the demonstration between 5% and 95%.
-    */
-
-    let chargedOffProbability =
-        20 + riskScore * 0.65;
-
-
-    chargedOffProbability =
-        Math.max(
-            5,
-            Math.min(
-                95,
-                chargedOffProbability
-            )
-        );
-
-
-    let fullyPaidProbability =
-        100 - chargedOffProbability;
-
-
-    const statusElement =
-        document.getElementById(
-            "predictionStatus"
-        );
-
-
-    const probabilityElement =
-        document.getElementById(
-            "predictionProbability"
-        );
-
-
-    const messageElement =
-        document.getElementById(
-            "predictionMessage"
-        );
-
-
-    if (chargedOffProbability >= 50) {
-
-        statusElement.textContent =
-            "CHARGED OFF";
-
-        statusElement.style.color =
-            "#fb7185";
-
-        probabilityElement.textContent =
-            chargedOffProbability.toFixed(2) +
-            "%";
-
-        messageElement.textContent =
-            "The demonstration indicates a higher relative default risk for these inputs.";
-
-    }
-    else {
-
-        statusElement.textContent =
-            "FULLY PAID";
-
-        statusElement.style.color =
-            "#a5b4fc";
-
-        probabilityElement.textContent =
-            fullyPaidProbability.toFixed(2) +
-            "%";
-
-        messageElement.textContent =
-            "The demonstration indicates a higher relative probability of the loan being fully paid.";
-
-    }
-
-
-    createPredictionChart(
-        fullyPaidProbability,
-        chargedOffProbability
-    );
 
 }
 
